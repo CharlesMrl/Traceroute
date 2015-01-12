@@ -21,7 +21,7 @@ public class MyModel {
         Process process = null;
         
         try {
-            process = rt.exec("traceroute google.com");  //execute Memory.java which is in same directory
+            process = rt.exec("java -jar ./lib/fakeroute.jar google.com");  //execute Memory.java which is in same directory
         } catch (IOException e) {
             // TODO Auto-generated catch block
             //e.printStackTrace();
