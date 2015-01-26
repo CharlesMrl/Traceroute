@@ -35,7 +35,7 @@ public class MyController {
         InputStream myStream = process.getInputStream();
        
         
-        int i;
+        int i,j,k;
         String myString = "";
         
         
@@ -50,13 +50,38 @@ public class MyController {
             Matcher m = p.matcher(myString);
             List myTest = new LinkedList();
             
+            
+            //Initialisation du graph
+               GraphView graph = new GraphView();
+        org.graphstream.graph.Graph g = graph.initGraph();
+        
+            String lines[] = myString.split("\\r?\\n");
+            List<String> son = new LinkedList();
+            List<String> mother = new LinkedList();
+            mother.add("ROOT");
+            
+            
+            for (i = 0; i< lines.length; i++){
             while (m.find())
             {
-                myTest.add(m.group());
-                System.out.print ("Trouvé < " + m.group());
-                System.out.println (" > de " + m.start() + " à " + m.end());
+                //myTest.add(m.group());
+                son.add(m.group());
+                //System.out.print ("Trouvé < " + m.group());
+                //System.out.println (" > de " + m.start() + " à " + m.end());
             }
-            System.out.println(myTest);
+            for (j=0; j<mother.size();j++)
+            {
+                for (k=0; k<son.size();k++)
+                {
+                    graph.addNodeTree(mother.get(j),son.get(k), g);
+                    
+                }
+            }
+            mother = son;
+            son = null;
+            }
+            graph.affichGraph(g);
+            //System.out.println(myTest);
             /*test = myString.split("\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}");
             
             for(String elem : test)
@@ -68,8 +93,8 @@ public class MyController {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
-        GraphView graph = new GraphView();
-        graph.testGraph();
+     
+        //graph.testGraph();
         
 
     }
