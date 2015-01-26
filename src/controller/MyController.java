@@ -4,7 +4,7 @@
  * and open the template in the editor.
  */
 
-package model;
+package controller;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -18,7 +18,7 @@ import view.GraphView;
  *
  * @author charlesmariller
  */
-public class MyModel {
+public class MyController {
     public static void main(String[] args) 
     {
         

@@ -32,7 +32,7 @@ public class GraphView {
 
 
 
-        graph.addAttribute("ui.stylesheet", "graph { padding: 40px; } node { text-alignment: at-right; text-background-mode: plain; text-background-color: #EB2; text-color: #222; text-size: 20px;}");
+        graph.addAttribute("ui.stylesheet", "graph { padding: 40px;  } node { text-alignment: at-right; text-background-mode: plain; text-background-color: #EB2; text-color: #222; text-size: 20px;}");
         graph.display();
     }
     
