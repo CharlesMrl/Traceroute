@@ -26,7 +26,7 @@ public class MyController {
         Process process = null;
         
         try {
-            process = rt.exec("java -jar ./lib/fakeroute.jar google.com");  //execute Memory.java which is in same directory
+            process = rt.exec("java -jar ./lib/fakeroute.jar apple.com");  //execute Memory.java which is in same directory
         } catch (IOException e) {
             // TODO Auto-generated catch block
             //e.printStackTrace();
@@ -45,40 +45,57 @@ public class MyController {
                 myString += (char)i;
             }
             System.out.println(myString);
-            String[] test = null;
-            Pattern p = Pattern.compile("\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}");
-            Matcher m = p.matcher(myString);
-            List myTest = new LinkedList();
+         String lines[] = myString.split("\\r?\\n");
+         Pattern p = Pattern.compile("\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}");
+             Matcher m ;
+             //System.out.println(p.matcher(lines[1]));
+             
+            //List myTest = new LinkedList();
             
             
             //Initialisation du graph
                GraphView graph = new GraphView();
         org.graphstream.graph.Graph g = graph.initGraph();
         
-            String lines[] = myString.split("\\r?\\n");
+           
             List<String> son = new LinkedList();
             List<String> mother = new LinkedList();
             mother.add("ROOT");
             
-            
-            for (i = 0; i< lines.length; i++){
+            //System.out.println(m.get(0).group());
+             for (i = 1; i< lines.length; i++){
+           
+            m = p.matcher(lines[i]);
+             
             while (m.find())
             {
                 //myTest.add(m.group());
+                //System.out.println(m.find());
                 son.add(m.group());
-                //System.out.print ("Trouvé < " + m.group());
-                //System.out.println (" > de " + m.start() + " à " + m.end());
+                System.out.print ("Trouvé < " + m.group());
+                System.out.println (" > de " + m.start() + " à " + m.end());
             }
+            
+            
+            for (k=0; k<son.size();k++)
+                {
+                    graph.addNodeTree(son.get(k), g);
+                }
+            
             for (j=0; j<mother.size();j++)
             {
+                System.out.println ("mother : " + mother.get(j));
                 for (k=0; k<son.size();k++)
                 {
-                    graph.addNodeTree(mother.get(j),son.get(k), g);
+ System.out.println ("son : " + son.get(k));                    
+//graph.addNodeTree(mother.get(j),son.get(k), g);
+                    graph.addRelation(mother.get(j),son.get(k), g);
                     
                 }
             }
-            mother = son;
-            son = null;
+            mother.clear();
+            mother.addAll(son);
+            son.clear();
             }
             graph.affichGraph(g);
             //System.out.println(myTest);

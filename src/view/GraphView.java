@@ -43,14 +43,23 @@ public class GraphView {
           return graph;
     }
     
-    public void addNodeTree(String mother, String son,org.graphstream.graph.Graph graph){
+    public void addNodeTree(String son,org.graphstream.graph.Graph graph){
         org.graphstream.graph.Node n =graph.addNode(son);
           n.addAttribute("ui.label",son);
-            graph.addEdge(son + mother , mother, son);
+            //graph.addEdge(son + mother , mother, son);
             
         
     }
     
+      public void addRelation(String mother, String son,org.graphstream.graph.Graph graph){
+        //org.graphstream.graph.Node n =graph.addNode(son);
+          //n.addAttribute("ui.label",son);
+            graph.addEdge(son + mother , mother, son);
+            
+        
+    }
+      
+      
     public void affichGraph(org.graphstream.graph.Graph graph){
          graph.addAttribute("ui.stylesheet", "graph { padding: 40px;  } node { text-alignment: at-right; text-background-mode: plain; text-background-color: #EB2; text-color: #222; text-size: 20px;}");
         graph.display();
