@@ -36,6 +36,12 @@ public class MyController extends Application{
 
     @Override
     public void start(Stage stage) throws Exception {
-        InterfaceFX inter = new InterfaceFX(stage);
+    
+            //Initialisation du graph
+            GraphView graph = new GraphView();
+            org.graphstream.graph.Graph myGraph = graph.initGraph(); 
+            graph.affichGraph(myGraph);
+        InterfaceFX inter = new InterfaceFX(stage, graph, myGraph);
+        
     }
 }

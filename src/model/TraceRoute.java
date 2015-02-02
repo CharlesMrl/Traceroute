@@ -7,8 +7,12 @@ package model;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import view.GraphView;
@@ -19,13 +23,13 @@ import view.GraphView;
  */
 public class TraceRoute {
     
-    public TraceRoute()
+    public TraceRoute(String IPName, GraphView graph, org.graphstream.graph.Graph myGraph)
     {
         Runtime rt = Runtime.getRuntime();
         Process process = null;
         
         try {
-                process = rt.exec("java -jar ./lib/fakeroute.jar apple.com");  //execute Memory.java which is in same directory
+                process = rt.exec("java -jar ./lib/fakeroute.jar "+ IPName);  //execute Memory.java which is in same directory
             } catch (IOException e) {
             // TODO Auto-generated catch block
             //e.printStackTrace();
@@ -54,14 +58,18 @@ public class TraceRoute {
             //List myTest = new LinkedList();
             
             
-            //Initialisation du graph
-            GraphView graph = new GraphView();
-            org.graphstream.graph.Graph myGraph = graph.initGraph();
         
            
             List<String> son = new LinkedList();
             List<String> mother = new LinkedList();
-            mother.add("ROOT");
+            InetAddress thisIp = null;
+             try {
+                 thisIp = InetAddress.getLocalHost();
+            } catch (UnknownHostException ex) {
+                Logger.getLogger(GraphView.class.getName()).log(Level.SEVERE, null, ex);
+            }
+
+            mother.add( thisIp.getHostAddress());
             
             //System.out.println(m.get(0).group());
             for (i = 1; i< lines.length; i++)
@@ -103,7 +111,7 @@ public class TraceRoute {
                 pos_x ++;
             }
             
-            graph.affichGraph(myGraph);
+            
             //System.out.println(myTest);
             /*test = myString.split("\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}");
             

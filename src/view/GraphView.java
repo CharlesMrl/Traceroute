@@ -6,6 +6,10 @@
 package view;
 
 
+import java.net.InetAddress;
+import java.net.UnknownHostException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.graphstream.graph.*;
 import org.graphstream.graph.implementations.*;
 
@@ -17,31 +21,19 @@ public class GraphView {
    
     int current_x, current_y;
     
-    public void testGraph()
-    {
-        org.graphstream.graph.Graph graph = new SingleGraph("Tutorial 1");
-
-        graph.addNode("A" );
-
-
-
-        org.graphstream.graph.Node n = graph.addNode("B");
-        n.addAttribute("ui.label","B");
-        graph.addNode("C" );
-        graph.addEdge("AB", "A", "B");
-        graph.addEdge("BC", "B", "C");
-        graph.addEdge("CA", "C", "A");
-
-
-
-        graph.addAttribute("ui.stylesheet", "graph { padding: 40px;  } node { text-alignment: at-right; text-background-mode: plain; text-background-color: #EB2; text-color: #222; text-size: 20px;}");
-        graph.display();
-    }
+    
     
     public org.graphstream.graph.Graph  initGraph(){
           org.graphstream.graph.Graph graph = new SingleGraph("Tutorial 1");
-          org.graphstream.graph.Node n = graph.addNode("ROOT");
-        n.addAttribute("ui.label","ROOT");
+          InetAddress thisIp = null;
+        try {
+            thisIp = InetAddress.getLocalHost();
+        } catch (UnknownHostException ex) {
+            Logger.getLogger(GraphView.class.getName()).log(Level.SEVERE, null, ex);
+        }
+           
+          org.graphstream.graph.Node n = graph.addNode(thisIp.getHostAddress());
+        n.addAttribute("ui.label",thisIp.getHostAddress());
           return graph;
     }
     

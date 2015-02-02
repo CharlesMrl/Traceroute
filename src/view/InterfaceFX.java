@@ -30,9 +30,13 @@ import model.TraceRoute;
  */
 public class InterfaceFX{
 
+    GraphView graph;
+    org.graphstream.graph.Graph myGraph;
     
-    
-    public InterfaceFX(Stage primaryStage) {
+    public InterfaceFX(Stage primaryStage, GraphView graph, org.graphstream.graph.Graph myGraph) 
+    {
+        this.graph = graph;
+        this.myGraph = myGraph;
         primaryStage.setTitle("JavaFX Welcome");
         
         GridPane grid = new GridPane();
@@ -41,28 +45,23 @@ public class InterfaceFX{
         grid.setVgap(10);
         grid.setPadding(new Insets(25, 25, 25, 25));
         
-        Text scenetitle = new Text("Welcome");
+        Text scenetitle = new Text("Traceroute manager");
         scenetitle.setFont(Font.font("Helvetica", FontWeight.NORMAL, 20));
         grid.add(scenetitle, 0, 0, 2, 1);
 
-        Label userName = new Label("User Name:");
+        Label userName = new Label("IP address: ");
         grid.add(userName, 0, 1);
 
-        TextField userTextField = new TextField();
-        grid.add(userTextField, 1, 1);
+        TextField IPTextField = new TextField();
+        grid.add(IPTextField, 1, 1);
 
-        Label pw = new Label("Password:");
-        grid.add(pw, 0, 2);
-
-        PasswordField pwBox = new PasswordField();
-        grid.add(pwBox, 1, 2);
         
         
-        final Text actiontarget = new Text("lol");
+        final Text actiontarget = new Text();
         grid.add(actiontarget, 1, 6);
         
         
-        Button btn = new Button("Sign in");
+        Button btn = new Button("Trace");
         HBox hbBtn = new HBox(10);
         hbBtn.setAlignment(Pos.BOTTOM_RIGHT);
         hbBtn.getChildren().add(btn);
@@ -72,7 +71,9 @@ public class InterfaceFX{
  
         @Override
         public void handle(ActionEvent e) {
-            TraceRoute route = new TraceRoute();
+            String name = IPTextField.getText();
+            TraceRoute route = new TraceRoute(name, graph, myGraph);
+            System.out.println(name);
             
             
         
