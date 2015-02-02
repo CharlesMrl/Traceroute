@@ -15,6 +15,8 @@ import org.graphstream.graph.implementations.*;
  */
 public class GraphView {
    
+    int current_x, current_y;
+    
     public void testGraph()
     {
         org.graphstream.graph.Graph graph = new SingleGraph("Tutorial 1");
@@ -54,7 +56,7 @@ public class GraphView {
       public void addRelation(String mother, String son,org.graphstream.graph.Graph graph){
         //org.graphstream.graph.Node n =graph.addNode(son);
           //n.addAttribute("ui.label",son);
-            graph.addEdge(son + mother , mother, son);
+            graph.addEdge(son + mother , mother, son, true);
             
         
     }
