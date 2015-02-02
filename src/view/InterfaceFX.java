@@ -23,6 +23,13 @@ import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import model.TraceRoute;
+import java.util.Random;
+import javafx.scene.Group;
+import javafx.scene.control.Menu;
+import javafx.scene.control.MenuBar;
+import javafx.scene.control.RadioMenuItem;
+import javafx.scene.control.ToggleGroup;
+import javafx.scene.layout.VBox;
  
 /**
  *
@@ -32,6 +39,7 @@ public class InterfaceFX{
 
     GraphView graph;
     org.graphstream.graph.Graph myGraph;
+    public static int os =0;
     
     public InterfaceFX(Stage primaryStage, GraphView graph, org.graphstream.graph.Graph myGraph) 
     {
@@ -55,7 +63,44 @@ public class InterfaceFX{
         TextField IPTextField = new TextField();
         grid.add(IPTextField, 1, 1);
 
+        final Menu OSMenu = new Menu("Operating System");
+        final Menu helpMenu = new Menu("Help");
         
+      
+        ToggleGroup toggleGroup = new ToggleGroup();
+
+        RadioMenuItem linuxItem = new RadioMenuItem("Linux");
+        linuxItem.setOnAction(new EventHandler<ActionEvent>() {
+            @Override public void handle(ActionEvent e) {
+                System.out.println("Linux");
+                os = 1;
+            }
+        });
+        linuxItem.setToggleGroup(toggleGroup);
+        RadioMenuItem windowsItem = new RadioMenuItem("Windows");
+        windowsItem.setOnAction(new EventHandler<ActionEvent>() {
+            @Override public void handle(ActionEvent e) {
+                System.out.println("Windows");
+                os = 2;
+            }
+        });
+        windowsItem.setToggleGroup(toggleGroup);
+          RadioMenuItem fakerouteItem = new RadioMenuItem("Fakeroute");
+        fakerouteItem.setOnAction(new EventHandler<ActionEvent>() {
+            @Override public void handle(ActionEvent e) {
+                System.out.println("FakeRoute");
+                os = 0;
+            }
+        });
+        fakerouteItem.setToggleGroup(toggleGroup);
+        fakerouteItem.setSelected(true);
+        MenuBar menuBar = new MenuBar();
+        OSMenu.getItems().add(fakerouteItem);
+        OSMenu.getItems().add(linuxItem);
+        OSMenu.getItems().add(windowsItem);
+        menuBar.getMenus().addAll(OSMenu, helpMenu);
+        
+        //grid.add(menuBar,0,0);
         
         final Text actiontarget = new Text();
         grid.add(actiontarget, 1, 6);
@@ -65,6 +110,9 @@ public class InterfaceFX{
         HBox hbBtn = new HBox(10);
         hbBtn.setAlignment(Pos.BOTTOM_RIGHT);
         hbBtn.getChildren().add(btn);
+        
+        Button rdm = new Button("Trace Random");
+        hbBtn.getChildren().add(rdm);
         grid.add(hbBtn, 1, 4);
         
         btn.setOnAction(new EventHandler<ActionEvent>() {
@@ -77,9 +125,45 @@ public class InterfaceFX{
             
             
         
-    }
-});
-        Scene scene = new Scene(grid, 300, 275);
+        }
+        
+        });
+        rdm.setOnAction(new EventHandler<ActionEvent>() {
+ 
+        @Override
+        public void handle(ActionEvent e) {
+            int i = 0;
+            int nb;
+            String ipAdd = "";
+            Random rdm = new Random();
+            
+            for (i = 0;i<4;i++)
+            {
+                nb = rdm.nextInt(255);
+                ipAdd+=nb;
+                if(i!=3)
+                    ipAdd+=".";
+            }
+            TraceRoute route = new TraceRoute(ipAdd, graph, myGraph);
+            System.out.println(ipAdd);
+            
+            
+        
+        }
+        });
+        
+        VBox vbox = new VBox(2);
+        //vbox.setAlignment(Pos.BOTTOM_RIGHT);
+        vbox.getChildren().add(menuBar);
+        vbox.getChildren().add(grid);
+        vbox.autosize();
+        
+        Group root = new Group();
+       
+        Scene scene = new Scene(root, 300, 275);
+        root.getChildren().add(vbox);
+        
+        
         primaryStage.setScene(scene);
         primaryStage.show();
     }

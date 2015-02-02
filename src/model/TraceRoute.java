@@ -16,6 +16,7 @@ import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import view.GraphView;
+import view.InterfaceFX;
 
 /**
  *
@@ -27,29 +28,41 @@ public class TraceRoute {
     {
         Runtime rt = Runtime.getRuntime();
         Process process = null;
-        
+        int i,j,k;
+        String myString = "";
         try {
-                process = rt.exec("java -jar ./lib/fakeroute.jar "+ IPName);  //execute Memory.java which is in same directory
+            
+                switch(InterfaceFX.os)
+                {
+                    case 0: process = rt.exec("java -jar ./lib/fakeroute.jar "+ IPName); 
+                        break;
+                    case 1: process = rt.exec("traceroute "+ IPName); 
+                        break;
+                    case 2: process = rt.exec("tracert "+ IPName); 
+                        break;
+                        
+                }
+                //execute Memory.java which is in same directory
             } catch (IOException e) {
             // TODO Auto-generated catch block
             //e.printStackTrace();
         }
         
+        
         InputStream myStream = process.getInputStream();
        
         
-        int i,j,k;
-        String myString = "";
-        int pos_x = 0, pos_y = 0;
-
         
+
+
         try {
             while((i = myStream.read()) != -1)
             {
                 myString += (char)i;
+                System.out.print((char)i);
             }
-            
             System.out.println(myString);
+            
             String lines[] = myString.split("\\r?\\n");
             Pattern p = Pattern.compile("\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}");
             Matcher m ;
@@ -70,7 +83,9 @@ public class TraceRoute {
             }
 
             mother.add( thisIp.getHostAddress());
-            
+            GraphView.y=10;
+            GraphView.x=GraphView.xmax+10;
+            GraphView.xmin=GraphView.x;
             //System.out.println(m.get(0).group());
             for (i = 1; i< lines.length; i++)
             {
@@ -90,7 +105,10 @@ public class TraceRoute {
                 for (k=0; k<son.size();k++)
                     {
                         graph.addNodeTree(son.get(k), myGraph);
+                        GraphView.x+=20;
+                        if(GraphView.xmax<GraphView.x) GraphView.xmax=GraphView.x;
                     }
+                GraphView.y+=5;
                 
                 for (j=0; j<mother.size();j++)
                 {
@@ -108,10 +126,12 @@ public class TraceRoute {
                 mother.clear();
                 mother.addAll(son);
                 son.clear();
-                pos_x ++;
+                GraphView.x=GraphView.xmin;
+                
             }
             
-            
+            if (GraphView.color==0) GraphView.color=1;
+            else GraphView.color=0;
             //System.out.println(myTest);
             /*test = myString.split("\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}");
             
